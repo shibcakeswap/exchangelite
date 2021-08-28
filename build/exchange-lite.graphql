@@ -1,0 +1,109 @@
+# Schema
+type _Schema_
+  # Token
+  @fulltext(
+    name: "tokenSearch",
+    language: en
+    algorithm: rank,
+    include: [
+      {
+        entity: "Token",
+        fields: [
+          { name: "id" },
+          { name: "name" },
+          { name: "symbol" },
+        ]
+      }
+    ]
+  )
+  # Pair
+  @fulltext(
+    name: "pairSearch",
+    language: en
+    algorithm: rank,
+    include: [
+      {
+        entity: "Pair",
+        fields: [
+          { name: "id" },
+          { name: "name" },
+        ]
+      }
+    ]
+  )
+
+"""
+ShibcakeSwap Factory
+"""
+type Factory @entity {
+  "ID (address)"
+  id: ID!
+
+  "Total of Pairs"
+  totalPairs: BigInt!
+
+  "Total of Tokens"
+  totalTokens: BigInt!
+}
+
+"""
+ShibcakeSwap Pairs (Shibcake LPs - Cake-LP)
+"""
+type Pair @entity {
+  "ID (address)"
+  id: ID!
+
+  "Token 0"
+  token0: Token!
+  "Token 1"
+  token1: Token!
+
+  "Token0 Symbol - Token1 Symbol"
+  name: String!
+
+  "Token0 reserve"
+  reserve0: BigDecimal!
+  "Token1 reserve"
+  reserve1: BigDecimal!
+
+  "Reserve, in BNB"
+  reserveBNB: BigDecimal!
+
+  "Token0 price"
+  token0Price: BigDecimal!
+  "Token1 price"
+  token1Price: BigDecimal!
+  "Volume, in token0 (base)"
+  volumeToken0: BigDecimal!
+  "Volume, in token1 (quote)"
+  volumeToken1: BigDecimal!
+
+  "Volume, in BNB"
+  volumeBNB: BigDecimal!
+
+  "Block number"
+  block: BigInt!
+  "Block timestamp"
+  timestamp: BigInt!
+}
+
+"""
+ShibcakeSwap Tokens
+"""
+type Token @entity {
+  "ID (address)"
+  id: ID!
+
+  "Name"
+  name: String!
+  "Symbol"
+  symbol: String!
+  "Decimals"
+  decimals: BigInt!
+
+  "Price, in BNB"
+  derivedBNB: BigDecimal!
+
+  "Pairs, with whitelisted Token(s)"
+  whitelist: [Pair!]!
+}
